@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.projectandroid.screens.HomeActivity;
 import com.example.projectandroid.screens.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -15,14 +16,24 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //code video 4 phút 11
+        //FirebaseUser user = FirebaseAuth.getInstanse().getCurrentuser();
+
         //splash screen wait for 2 sec and then Launch Login activity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivities(new Intent[]{intent});
-                finish();
+
+                //if(user != null) {
+                //if iser is already login then it will go to home screem
+                //he do not need to login again
+                    //startActivities(new Intent[]{new Intent(SplashActivity.this, HomeActivity.class)});
+                //} else {
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivities(new Intent[]{intent});
+                    finish();
+                //}
             }
-        }, 2000);
+        }, 3000);
     }
 }
