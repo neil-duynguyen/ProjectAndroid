@@ -5,10 +5,9 @@ import java.util.List;
 public class Item {
     private String location;
     private String price;
-    private List<Integer> images;
     private String description;
     private String shortDescription;
-    private int totalImages;
+    private String image;
 
     public Item() {
     }
@@ -19,13 +18,20 @@ public class Item {
         this.shortDescription = shortDescription;
     }
 
-    public Item(String location, String price, List<Integer> images, String description, String shortDescription, int totalImages) {
+    public Item(String location, String price, String description, String shortDescription, String image) {
         this.location = location;
         this.price = price;
-        this.images = images;
         this.description = description;
         this.shortDescription = shortDescription;
-        this.totalImages = totalImages;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getLocation() {
@@ -43,15 +49,6 @@ public class Item {
     public void setPrice(String price) {
         this.price = price;
     }
-
-    public List<Integer> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Integer> images) {
-        this.images = images;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -66,13 +63,5 @@ public class Item {
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
-    }
-
-    public int getTotalImages() {
-        return totalImages;
-    }
-
-    public void setTotalImages(int totalImages) {
-        this.totalImages = totalImages;
     }
 }
