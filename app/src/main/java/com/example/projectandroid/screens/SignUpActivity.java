@@ -97,13 +97,13 @@ public class SignUpActivity extends AppCompatActivity {
 
                     //save data in Firebase database with automatic generated key
                     //push function for use => automatic key generation
-                    mRef.child("user").push().setValue(user);
+                    mRef.child("users").push().setValue(user);
                     startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                     finish();
 
                     Toast.makeText(SignUpActivity.this, "User create successfully ...", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Fail to create user ...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Fail to create user ..", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
