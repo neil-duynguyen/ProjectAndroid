@@ -7,9 +7,18 @@
     android:background="@color/light_grey"
     tools:context=".screens.SignUpActivity">
 
-    <TextView
-        android:id="@+id/welcome"
+    <ImageView
         android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:background="@drawable/house_background"
+        />
+
+    <TextView
+        android:paddingStart="7dp"
+        android:paddingEnd="7dp"
+        android:background="@color/white"
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -20,14 +29,17 @@
         android:textStyle="bold" />
 
     <TextView
+        android:textColor="@color/drak_orange"
+        android:paddingStart="7dp"
+        android:paddingEnd="8dp"
+        android:background="@color/white"
         android:id="@+id/reantal_app"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:text="Rental App"
         android:layout_below="@+id/welcome"
-        android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold" />
 
@@ -145,7 +157,7 @@
                 <TextView
                     android:id="@+id/have_account"
                     android:layout_margin="16dp"
-                    android:text="Already have account ..Login"
+                    android:text="Already have account? Sign In"
                     android:textSize="20sp"
                     android:textAlignment="center"
                     android:textStyle="italic"

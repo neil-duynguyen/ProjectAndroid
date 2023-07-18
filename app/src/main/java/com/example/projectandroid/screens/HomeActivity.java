@@ -68,6 +68,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
-
-
 }

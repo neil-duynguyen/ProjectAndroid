@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    tools:context=".providerScreens.SuccessActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:background="@color/green"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="28dp"
+        android:paddingTop="100dp"
+        android:paddingBottom="180dp"
+        android:drawableTop="@drawable/baseline_check_circle_outline_24"
+        android:text="Recharge Successfull"
+        android:textColor="@color/light_green"
+        />
+
+    <LinearLayout
+        android:background="@drawable/layout_bg"
+        android:layout_marginTop="350dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/drak_grey"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Payment Summary" />
+
+                <TextView
+                    android:drawableLeft="@drawable/baseline_wallet_24"
+                    android:text="Wallet"
+                    android:textStyle="bold"
+                    android:id="@+id/user_name"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:gravity="right"
+
+                    android:text="20000 VNĐ"
+                    android:textStyle="bold"
+                    android:id="@+id/success_befor"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:gravity="right"
+
+                    android:text="+ 20000 VNĐ"
+                    android:textStyle="bold"
+                    android:id="@+id/success_amount"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:gravity="right"
+
+                    android:text="= 40000 VNĐ"
+                    android:textStyle="bold"
+                    android:id="@+id/success_after"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/drak_orange" />
+
+                <TextView
+
+                    android:text="TransactionID: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_transId"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+
+                    android:text="Transaction Token: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_transtoken"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="Result: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_mes"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="status: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_status"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/sign_up_button"
+                    android:padding="16dp"
+                    android:layout_margin="16dp"
+                    android:text="Go to Wallet"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_bg"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -6,6 +6,9 @@
     <color name="drak_grey">#9DA0A2</color>
     <color name="drak_orange">#B05F35</color>
     <color name="red">#FF0000</color>
+    <color name="green">#2da25c</color>
+    <color name="light_green">#b3ebca</color>
+    <color name="grey">#666666</color>
 
 
 </resources>

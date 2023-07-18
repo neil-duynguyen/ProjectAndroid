@@ -62,7 +62,7 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userProfile = view.findViewById(R.id.profile_image);
+        /*userProfile = view.findViewById(R.id.profile_image);
         userName = view.findViewById(R.id.user_name);
         userEmail = view.findViewById(R.id.user_email);
         updateButton = view.findViewById(R.id.update_button);
@@ -123,25 +123,25 @@ public class AccountFragment extends Fragment {
                 uploadImage();
             }
         });
-
+*/
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+/*
         if (requestCode == Pick_Image && resultCode == RESULT_OK) {
             assert data != null;
             if (data.getData() != null) {
                 uri = data.getData();
                 userProfile.setImageURI(uri);
             }
-        }
+        }*/
     }
 
     private void uploadImage() {
-        StorageReference ref = FirebaseStorage.getInstance()
+        /*StorageReference ref = FirebaseStorage.getInstance()
                 .getReference().child("images/" + UUID.randomUUID().toString());
         ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -187,6 +187,7 @@ public class AccountFragment extends Fragment {
         });
 
     }
-
+*/
+    }
 
 }
