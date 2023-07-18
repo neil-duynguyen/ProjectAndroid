@@ -1,10 +1,13 @@
 package com.example.projectandroid.screens;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,22 +17,27 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.projectandroid.R;
 import com.example.projectandroid.model.User;
+import com.example.projectandroid.providerScreens.HomeProviderActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUpActivity extends AppCompatActivity {
-
+    User user;
     private TextView haveAccount;
     private FirebaseAuth mAuth;
     private EditText userName, userEmail, userPassword, confirmPassword;
     private AppCompatButton signUpButton;
     private DatabaseReference mRef;
+    ProgressDialog dialog;
+    Spinner spinner;
+    TextView err ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +50,20 @@ public class SignUpActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.user_password);
         confirmPassword = findViewById(R.id.user_confirm_password);
         signUpButton = findViewById(R.id.sign_up_button);
+        spinner = findViewById(R.id.user_role);
+        err = findViewById(R.id.sign_up_error);
+        err.setVisibility(View.GONE);
+        String[] items = {"renter", "provider"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
-        mRef = FirebaseDatabase.getInstance().getReference();
+        mRef =  FirebaseDatabase.getInstance().getReference();
 
+        dialog = new ProgressDialog(this);
         haveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,19 +105,31 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void createUser(String email, String password, String name) {
+        dialog.setTitle("Sign Up");
+        dialog.setMessage("");
+        dialog.show();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
-                User user = new User(name, email);
+                String role = spinner.getSelectedItem().toString();
+                String avartar = "https://firebasestorage.googleapis.com/v0/b/rentalhome-df2d1.appspot.com/o/60111.jpg?alt=media&token=23b1b40d-379c-49cf-b05c-10c2f3b34e96";
+                user = new User(name, email, 0, avartar,role);
 
                 if (task.isSuccessful()) {
 
                     //save data in Firebase database with automatic generated key
                     //push function for use => automatic key generation
-                    mRef.child("users").push().setValue(user);
-                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
-                    finish();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    saveUserToDatabase(currentUser.getUid());
+                    dialog.dismiss();
+                    if(role.equals("renter")){
+                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+
+                    }else if(role.equals("provider")){
+                        startActivity(new Intent(SignUpActivity.this, HomeProviderActivity.class));
+
+                    }
+                    finishAffinity();
 
                     Toast.makeText(SignUpActivity.this, "User create successfully ...", Toast.LENGTH_SHORT).show();
                 } else {
@@ -109,8 +139,25 @@ public class SignUpActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignUpActivity.this, "Fail to create user ...", Toast.LENGTH_SHORT).show();
+                err.setVisibility(View.VISIBLE);
+                err.setText(e.getMessage());
+                dialog.dismiss();
+                Toast.makeText(SignUpActivity.this, "Fail to create user", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    private void saveUserToDatabase(String uid) {
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference usersRef = databaseRef.child("users");
+        DatabaseReference userRef = usersRef.child(uid);
+
+        userRef.child("name").setValue(user.getName());
+        userRef.child("email").setValue(user.getEmail());
+        userRef.child("image").setValue(user.getImage());
+        userRef.child("wallet").setValue(user.getWallet());
+        userRef.child("role").setValue(user.getRole());
+
     }
 }

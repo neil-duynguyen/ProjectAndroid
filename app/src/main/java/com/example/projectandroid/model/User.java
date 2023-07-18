@@ -5,13 +5,19 @@ public class User {
     private String name;
     private String email;
     private String image;
+    private long wallet;
+    private String role ;
+
 
     public User() {
     }
 
-    public User(String name, String email) {
+    public User(String name, String email,long wallet, String image,String Role) {
         this.name = name;
         this.email = email;
+        this.wallet = wallet;
+        this.image = image;
+        this.role = Role;
     }
 
     public String getName() {
@@ -36,5 +42,21 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public long getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(long wallet) {
+        this.wallet = wallet;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -77,7 +77,6 @@ public class AccountFragment extends Fragment {
                     userName.setText(user.getName());
                     userEmail.setText(user.getEmail());
                     id = snapshot.getKey();
-
                     Glide
                             .with(getContext())
                             .load(user.getImage())

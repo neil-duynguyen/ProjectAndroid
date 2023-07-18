@@ -1,6 +1,7 @@
 package com.example.projectandroid.screens;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -13,16 +14,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
+import com.example.projectandroid.model.User;
+import com.example.projectandroid.providerScreens.HomeProviderActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView createAccount;
+    private TextView createAccount, tvErr;
+
     /*private Button login;*/
     private EditText email, password;
     private AppCompatButton loginButton;
@@ -37,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.user_email);
         password = findViewById(R.id.user_password);
         loginButton = findViewById(R.id.login_button);
+        tvErr = findViewById(R.id.sign_in_error);
+        tvErr.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -44,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                //startActivity(new Intent(LoginActivity.this, PaymentActivity.class));
             }
         });
 
@@ -85,20 +100,64 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-
                     Toast.makeText(LoginActivity.this, "Succesfully login", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    finish();
+                    redirectByRole();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Fail..", Toast.LENGTH_SHORT).show();
+                    Exception exception = task.getException();
+                    if (exception != null) {
+                        String errorMessage = exception.getMessage();
+                        tvErr.setVisibility(View.VISIBLE);
+                        tvErr.setText(errorMessage);
+                        //Toast.makeText(LoginActivity.this, "Fail: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    } else {
+                        tvErr.setVisibility(View.VISIBLE);
+                        tvErr.setText("Unknown error occurred.");
+                        //Toast.makeText(LoginActivity.this, "Fail: Unknown error", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this, "Fail...", Toast.LENGTH_SHORT).show();
+                tvErr.setVisibility(View.VISIBLE);
+                tvErr.setText(e.getMessage());
+                //Toast.makeText(LoginActivity.this, "Fail...", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void redirectByRole() {
+
+        FirebaseUser temp = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(temp!=null){
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // Lấy dữ liệu từ danh sách và xử lý
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User object = snapshot.getValue(User.class);
+                        // Xử lý object ở đây
+                        if(snapshot.getKey().equals(temp.getUid())){
+                            if(object.getRole().equals("renter")){
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                finishAffinity();
+                            }else if(object.getRole().equals("provider")){
+                                startActivity(new Intent(LoginActivity.this, HomeProviderActivity.class));
+                                finishAffinity();
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Xử lý lỗi nếu có
+                }
+            });
+        }
     }
 
 }

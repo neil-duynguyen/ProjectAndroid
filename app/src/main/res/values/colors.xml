@@ -5,6 +5,7 @@
     <color name="light_grey">#DEE1E9</color>
     <color name="drak_grey">#9DA0A2</color>
     <color name="drak_orange">#B05F35</color>
+    <color name="red">#FF0000</color>
 
 
 </resources>
