@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.1.0'
     implementation 'com.google.firebase:firebase-storage:20.1.0'
     implementation fileTree(dir: 'C:\\Users\\tramy\\Desktop\\Sem6\\ProjectAndroid\\zaloSDK', include: ['*.aar', '*.jar'], exclude: [])
+    implementation fileTree(dir: 'D:\\Ki7\\PRM392\\ProjectAndroid\\ProjectAndroid\\zaloSDK', include: ['*.aar', '*.jar'], exclude: [])
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

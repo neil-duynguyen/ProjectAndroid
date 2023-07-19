@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/ic_home"
+        android:id="@+id/menu_home_provider"
+        android:title="Home"/>
+
+    <item android:icon="@drawable/transaction_icon"
+        android:id="@+id/menu_transction_provider"
+        android:title="Transaction"/>
+
+    <item android:icon="@drawable/ic_chat"
+        android:id="@+id/menu_chat_provider"
+        android:title="Chat"/>
+
+    <item android:icon="@drawable/ic_account"
+        android:id="@+id/menu_account_provider"
+        android:title="Account"/>
+</menu>

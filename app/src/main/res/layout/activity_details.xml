@@ -57,7 +57,7 @@
     <TextView
         android:id="@+id/text"
         android:textSize="28sp"
-        android:text="Description : -"
+        android:text="Description :"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/short_description"
         app:layout_constraintStart_toStartOf="parent"
