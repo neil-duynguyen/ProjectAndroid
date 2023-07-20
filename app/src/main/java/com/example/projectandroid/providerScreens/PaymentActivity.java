@@ -33,7 +33,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -103,10 +105,15 @@ public class PaymentActivity extends AppCompatActivity {
                                         DatabaseReference abcRef = transactionsRef.child(currentUser.getUid());
                                         Date date= new Date();
 
-                                        Transaction transaction = new Transaction(transactionId,amount,"Payment Success", 200,date, transToken,tempUser.getWallet(), tempUser.getWallet()+ amount );
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                                        String formattedDate = sdf.format(date);
 
-                                        abcRef.child(transToken).setValue(transaction);
-                                        startActivity(new Intent(PaymentActivity.this, SuccessActivity.class));
+                                        Transaction transaction = new Transaction(transactionId,amount,"Payment Success", 200,formattedDate, transToken,tempUser.getWallet(), tempUser.getWallet()+ amount );
+
+                                        abcRef.child(transactionId).setValue(transaction);
+                                        Intent intent = new Intent(PaymentActivity.this, SuccessActivity.class);
+                                        intent.putExtra("transId", transactionId);
+                                        startActivity(intent);
                                     }
 
                                 });
@@ -119,18 +126,14 @@ public class PaymentActivity extends AppCompatActivity {
                                 DatabaseReference abcRef = transactionsRef.child(currentUser.getUid());
                                 Date date= new Date();
 
-                                Transaction transaction = new Transaction(appTransID,amount,"User Cancel Payment", 400,date, zpTransToken,tempUser.getWallet(), tempUser.getWallet() );
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                                String formattedDate = sdf.format(date);
+                                Transaction transaction = new Transaction(appTransID,amount,"User Cancel Payment", 400,formattedDate, zpTransToken,tempUser.getWallet(), tempUser.getWallet() );
 
                                 abcRef.child(appTransID).setValue(transaction);
-                                new AlertDialog.Builder(PaymentActivity.this)
-                                        .setTitle("User Cancel Payment")
-                                        .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", null).show();
+                                Intent intent = new Intent(PaymentActivity.this, FailActivity.class);
+                                intent.putExtra("transId", appTransID);
+                                startActivity(intent);
                             }
 
                             @Override
@@ -140,18 +143,14 @@ public class PaymentActivity extends AppCompatActivity {
                                 DatabaseReference abcRef = transactionsRef.child(currentUser.getUid());
                                 Date date= new Date();
 
-                                Transaction transaction = new Transaction(appTransID,amount,"Payment Fail", 400,date, zpTransToken,tempUser.getWallet(), tempUser.getWallet() );
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                                String formattedDate = sdf.format(date);
+                                Transaction transaction = new Transaction(appTransID,amount,"Payment Fail", 400,formattedDate, zpTransToken,tempUser.getWallet(), tempUser.getWallet() );
 
                                 abcRef.child(appTransID).setValue(transaction);
-                                new AlertDialog.Builder(PaymentActivity.this)
-                                        .setTitle("Payment Fail")
-                                        .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", null).show();
+                                Intent intent = new Intent(PaymentActivity.this, FailActivity.class);
+                                intent.putExtra("transId", appTransID);
+                                startActivity(intent);
                             }
                         });
                     }

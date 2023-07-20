@@ -7,14 +7,16 @@ public class Transaction {
     public long Amount ;
     public String Result;
     public int Status;
-    public Date TransDate;
+    public String TransDate;
     public String TranToken;
 
     public long walletBefor ;
     public long walletAfter ;
 
+    public Transaction() {
+    }
 
-    public Transaction(String transactionId, long amount, String result, int status, Date transDate, String tranToken, long walletBefor, long walletAfter) {
+    public Transaction(String transactionId, long amount, String result, int status, String transDate, String tranToken, long walletBefor, long walletAfter) {
         TransactionId = transactionId;
         Amount = amount;
         Result = result;
