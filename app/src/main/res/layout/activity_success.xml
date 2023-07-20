@@ -144,6 +144,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:text="status: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_status"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
                     android:text="Result: dsgsdvcxvxcv"
 
                     android:textStyle="bold"
@@ -157,10 +170,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:text="status: dsgsdvcxvxcv"
+                    android:text="Date: dsgsdvcxvxcv"
 
                     android:textStyle="bold"
-                    android:id="@+id/success_status"
+                    android:id="@+id/success_date"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textColorHint="@color/black"
@@ -171,8 +184,9 @@
                     android:layout_height="wrap_content"/>
 
 
+
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sign_up_button"
+                    android:id="@+id/success_button"
                     android:padding="16dp"
                     android:layout_margin="16dp"
                     android:text="Go to Wallet"
