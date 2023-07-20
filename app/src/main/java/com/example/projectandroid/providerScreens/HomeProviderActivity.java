@@ -56,7 +56,7 @@ public class HomeProviderActivity extends AppCompatActivity implements Navigatio
 
         if(getItem == R.id.menu_account_provider)
         {
-            fragment = new AccountFragmentProvider();
+            fragment = new AccountFragment();
         }
 
         return loadFragment(fragment);

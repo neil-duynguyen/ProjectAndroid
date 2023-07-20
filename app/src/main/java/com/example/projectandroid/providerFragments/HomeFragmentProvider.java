@@ -1,66 +1,128 @@
 package com.example.projectandroid.providerFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.projectandroid.R;
+import com.example.projectandroid.adapters.HomeAdapter;
+import com.example.projectandroid.adaptersProvider.HomeAdapterProvider;
+import com.example.projectandroid.listeners.ItemListener;
+import com.example.projectandroid.model.Item;
+import com.example.projectandroid.providerScreens.DetailsProviderActivity;
+import com.example.projectandroid.providerScreens.PaymentActivity;
+import com.example.projectandroid.screens.DetailsActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragmentProvider#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HomeFragmentProvider extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeFragmentProvider() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragmentProvider.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragmentProvider newInstance(String param1, String param2) {
-        HomeFragmentProvider fragment = new HomeFragmentProvider();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+public class HomeFragmentProvider extends Fragment implements ItemListener {
+    private RecyclerView listRoom;
+    private HomeAdapterProvider adapter;
+    private List<Item> itemList;
+    Button btnAddRoom;
+    TextView tv_price_proviver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home_provider, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listRoom = view.findViewById(R.id.list_room_provider);
+        itemList = new ArrayList<>();
+
+
+        FirebaseDatabase.getInstance().getReference().child("image")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                            itemList.add(new Item(
+                                    Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString()
+
+                            ));
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+        adapter = new HomeAdapterProvider(getContext(), itemList, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        listRoom.setLayoutManager(linearLayoutManager);
+        listRoom.setAdapter(adapter);
+
+        btnAddRoom = view.findViewById(R.id.btn_addRoom);
+        //tách chuỗi
+        tv_price_proviver = view.findViewById(R.id.price_provider);
+        String price = tv_price_proviver.getText().toString();
+        Integer amount = Integer.valueOf(price.substring(0, price.length() - 3));
+        //String currency = price.substring(price.length() - 3);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("pricePost");
+        final Integer[] priceCost = new Integer[1];
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 Integer price = (Integer) snapshot.getValue(Integer.class);
+                priceCost[0] = price;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(amount < priceCost[0]) {
+                    startActivity(new Intent(getContext(), PaymentActivity.class));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void OnItemPosition(int position) {
+        Intent intent = new Intent(getContext(), DetailsProviderActivity.class);
+        intent.putExtra("price", itemList.get(position).getPrice());
+        intent.putExtra("location", itemList.get(position).getLocation());
+        intent.putExtra("description", itemList.get(position).getDescription());
+        intent.putExtra("shortDescription", itemList.get(position).getShortDescription());
+        intent.putExtra("image", itemList.get(position).getImage());
+        intent.putExtra("id", itemList.get(position).getId());
+        startActivity(intent);
     }
 }

@@ -86,7 +86,8 @@ public class HomeFragment extends Fragment implements ItemListener {
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString()
+                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString()
                                     ));
                         }
                         adapter.notifyDataSetChanged();
@@ -123,6 +124,7 @@ public class HomeFragment extends Fragment implements ItemListener {
         intent.putExtra("description", itemList.get(position).getDescription());
         intent.putExtra("shortDescription", itemList.get(position).getShortDescription());
         intent.putExtra("image", itemList.get(position).getImage());
+        intent.putExtra("id", itemList.get(position).getProviderId());
         startActivity(intent);
     }
 
