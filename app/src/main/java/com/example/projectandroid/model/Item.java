@@ -8,6 +8,9 @@ public class Item {
     private String description;
     private String shortDescription;
     private String image;
+    private String id;
+    private String providerId;
+
 
     public Item() {
     }
@@ -24,6 +27,41 @@ public class Item {
         this.description = description;
         this.shortDescription = shortDescription;
         this.image = image;
+    }
+
+    public Item(String location, String price, String description, String shortDescription, String image, String id) {
+        this.location = location;
+        this.price = price;
+        this.description = description;
+        this.shortDescription = shortDescription;
+        this.image = image;
+        this.id = id;
+    }
+
+    public Item(String location, String price, String description, String shortDescription, String image, String id, String providerId) {
+        this.location = location;
+        this.price = price;
+        this.description = description;
+        this.shortDescription = shortDescription;
+        this.image = image;
+        this.id = id;
+        this.providerId = providerId;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {
