@@ -14,6 +14,7 @@ import com.example.projectandroid.R;
 import com.example.projectandroid.fragments.HomeFragment;
 import com.example.projectandroid.fragments.StoreMapActivity;
 import com.example.projectandroid.model.Item;
+import com.example.projectandroid.model.Post;
 import com.example.projectandroid.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
     de.hdodenhof.circleimageview.CircleImageView imgProfile;
     String pri , des;
     String img , shor , id;
-    Item item;
+    Post item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
         img = getIntent().getStringExtra("image");
         shor = getIntent().getStringExtra("shortDescription");
         id = getIntent().getStringExtra("id");
-        item= new Item();
+        item= new Post();
         getPost(id);
 
 
@@ -62,7 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, StoreMapActivity.class);
-                intent.putExtra("location", item.getLocation());
+                intent.putExtra("location", item.location);
                 startActivity(intent);
             }
         });
@@ -115,7 +116,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
                     if(productSnapshot.getKey().equals(id)){
-                        item = productSnapshot.getValue(Item.class);
+                        item = productSnapshot.getValue(Post.class);
                     }
                 }
             }
