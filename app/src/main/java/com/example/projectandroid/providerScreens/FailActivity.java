@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.projectandroid.R;
 import com.example.projectandroid.model.Transaction;
+import com.example.projectandroid.providerFragments.TransactionFragmentProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class FailActivity extends AppCompatActivity {
-
+    androidx.appcompat.widget.AppCompatButton btn;
     TextView tvBefor, tvAmount, tvAfter, tvid, tvtoken, tvdate, tvstatus, tvresult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,13 @@ public class FailActivity extends AppCompatActivity {
         tvdate = findViewById(R.id.success_date);
         tvstatus = findViewById(R.id.success_status);
         tvresult = findViewById(R.id.success_mes);
+        btn = findViewById(R.id.success_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(FailActivity.this, TransactionFragmentProvider.class));
+            }
+        });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();

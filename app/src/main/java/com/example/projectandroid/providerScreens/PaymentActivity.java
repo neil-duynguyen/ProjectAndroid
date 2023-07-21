@@ -37,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -188,7 +190,7 @@ public class PaymentActivity extends AppCompatActivity {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         String formattedDate = sdf.format(date);
 
-                        Transaction transaction = new Transaction(transId,amount,"Payment Success", 200,formattedDate, tempToken,tempUser.getWallet(), tempUser.getWallet()+ amount );
+                        Transaction transaction = new Transaction(transId,amount,"Payment Success", 200,formattedDate, tempToken,tempUser.getWallet()- amount, tempUser.getWallet() );
 
                         abcRef.child(transId).setValue(transaction);
                         Intent intent = new Intent(PaymentActivity.this, SuccessActivity.class);
@@ -230,5 +232,14 @@ public class PaymentActivity extends AppCompatActivity {
                 // Xử lý lỗi nếu có
             }
         });
+    }
+    public String convertToFormattedStringLONG(long number) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###,###", symbols);
+        String formattedString = decimalFormat.format(number);
+
+        return formattedString;
     }
 }
