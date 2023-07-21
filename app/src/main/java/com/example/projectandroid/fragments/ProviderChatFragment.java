@@ -1,18 +1,20 @@
-package com.example.projectandroid.providerFragments;
+package com.example.projectandroid.fragments;
+
+import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.example.projectandroid.R;
 import com.example.projectandroid.adapters.ChatAdapter;
 import com.example.projectandroid.model.Message;
@@ -23,13 +25,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ChatFragmentProvider extends Fragment {
-
+public class ProviderChatFragment extends Fragment{
     private ListView listView;
     private EditText editTextMessage;
     private Button btnSend;
@@ -38,7 +37,7 @@ public class ChatFragmentProvider extends Fragment {
     private String currentUserID;
     private ChatAdapter chatAdapter;
 
-    public ChatFragmentProvider() {
+    public ProviderChatFragment() {
         // Required empty public constructor
     }
 
@@ -48,7 +47,9 @@ public class ChatFragmentProvider extends Fragment {
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("messages");
         messages = new ArrayList<>();
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (currentUser != null) {
             currentUserID = currentUser.getEmail();
         } else {
@@ -61,7 +62,6 @@ public class ChatFragmentProvider extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat_provider, container, false);
         listView = view.findViewById(R.id.list_viewp);
         listView.setAdapter(chatAdapter);
@@ -120,4 +120,5 @@ public class ChatFragmentProvider extends Fragment {
             // Handle the case when the user is not signed in or authentication fails
         }
     }
+
 }
