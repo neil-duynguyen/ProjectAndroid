@@ -1,6 +1,9 @@
 package com.example.projectandroid.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatFragment extends Fragment {
-
+public class ProviderChatFragment extends Fragment{
     private ListView listView;
     private EditText editTextMessage;
     private Button btnSend;
@@ -35,7 +37,7 @@ public class ChatFragment extends Fragment {
     private String currentUserID;
     private ChatAdapter chatAdapter;
 
-    public ChatFragment() {
+    public ProviderChatFragment() {
         // Required empty public constructor
     }
 
@@ -45,7 +47,9 @@ public class ChatFragment extends Fragment {
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("messages");
         messages = new ArrayList<>();
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (currentUser != null) {
             currentUserID = currentUser.getEmail();
         } else {
@@ -58,11 +62,11 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        listView = view.findViewById(R.id.list_view);
+        View view = inflater.inflate(R.layout.fragment_chat_provider, container, false);
+        listView = view.findViewById(R.id.list_viewp);
         listView.setAdapter(chatAdapter);
-        editTextMessage = view.findViewById(R.id.edit_text_message);
-        btnSend = view.findViewById(R.id.btn_send);
+        editTextMessage = view.findViewById(R.id.edit_text_messagep);
+        btnSend = view.findViewById(R.id.btn_sendp);
         return view;
     }
 
@@ -116,5 +120,5 @@ public class ChatFragment extends Fragment {
             // Handle the case when the user is not signed in or authentication fails
         }
     }
-}
 
+}
