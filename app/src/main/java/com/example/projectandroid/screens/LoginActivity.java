@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.HomeProviderActivity;
+import com.example.projectandroid.providerScreens.PickerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -62,8 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-                //startActivity(new Intent(LoginActivity.this, PaymentActivity.class));
+                //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, PickerActivity.class));
             }
         });
 
