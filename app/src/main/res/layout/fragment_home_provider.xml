@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/list_room_provider"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_bg"
         android:padding="16dp"

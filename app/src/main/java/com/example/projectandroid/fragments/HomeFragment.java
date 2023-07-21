@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.adapters.HomeAdapter;
 import com.example.projectandroid.listeners.ItemListener;
-import com.example.projectandroid.listeners.LogoutListener;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.HomeProviderActivity;
@@ -87,8 +86,7 @@ public class HomeFragment extends Fragment implements ItemListener {
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString().toString()
-                                //    Objects.requireNonNull(dataSnapshot.child("providerId").getValue()).toString()
+                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString()
                                     ));
                         }
                         adapter.notifyDataSetChanged();

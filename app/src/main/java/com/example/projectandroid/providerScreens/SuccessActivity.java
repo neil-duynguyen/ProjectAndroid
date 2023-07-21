@@ -34,7 +34,7 @@ public class SuccessActivity extends AppCompatActivity {
         tvtoken = findViewById(R.id.success_transtoken);
         tvdate = findViewById(R.id.success_date);
         tvstatus = findViewById(R.id.success_status);
-        tvid = findViewById(R.id.success_mes);
+        tvresult = findViewById(R.id.success_mes);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -52,6 +52,8 @@ public class SuccessActivity extends AppCompatActivity {
                         }else{
                             tvBefor.setText(String.valueOf(trans.walletBefor));
                         }
+                        tvAmount.setText("+ " + String.valueOf(trans.Amount));
+                        tvAfter.setText("= "+ String.valueOf(trans.walletAfter) );
                         tvid.setText("TransactionId: "+trans.TransactionId);
                         tvtoken.setText("TransactionToken: "+trans.TranToken);
                         tvdate.setText("Date: "+trans.TransDate);
@@ -61,7 +63,7 @@ public class SuccessActivity extends AppCompatActivity {
                             tvstatus.setText("Status: "+"Fail");
 
                         }
-                        tvresult.setText("Message: "+ String.valueOf(trans.Result));
+                       tvresult.setText("Message: "+ trans.Result);
                         return;
                     }
 

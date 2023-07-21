@@ -22,7 +22,11 @@ import com.example.projectandroid.R;
 import com.example.projectandroid.fragments.HomeFragment;
 import com.example.projectandroid.model.Transaction;
 import com.example.projectandroid.model.User;
+import com.example.projectandroid.screens.HomeActivity;
+import com.example.projectandroid.screens.LoginActivity;
 import com.example.projectandroid.zaloService.CreateOrder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +39,9 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -58,7 +64,7 @@ public class PaymentActivity extends AppCompatActivity {
         setInfor();
         btnCheck = findViewById(R.id.payment_checkout);
         etAmount = findViewById(R.id.payment_amount);
-
+        getUser();
         StrictMode.ThreadPolicy policy = new
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -100,20 +106,8 @@ public class PaymentActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        DatabaseReference transactionsRef = FirebaseDatabase.getInstance().getReference().child("transactions");
-                                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                                        DatabaseReference abcRef = transactionsRef.child(currentUser.getUid());
-                                        Date date= new Date();
+                                        updateWallet(amount, transactionId, transToken, appTransID);
 
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                                        String formattedDate = sdf.format(date);
-
-                                        Transaction transaction = new Transaction(transactionId,amount,"Payment Success", 200,formattedDate, transToken,tempUser.getWallet(), tempUser.getWallet()+ amount );
-
-                                        abcRef.child(transactionId).setValue(transaction);
-                                        Intent intent = new Intent(PaymentActivity.this, SuccessActivity.class);
-                                        intent.putExtra("transId", transactionId);
-                                        startActivity(intent);
                                     }
 
                                 });
@@ -160,6 +154,54 @@ public class PaymentActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    FirebaseUser temp;
+
+    private void getUser() {
+
+        temp = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(temp!=null){
+
+        }else{
+            Intent intent = new Intent(PaymentActivity.this, LoginActivity.class);
+            intent.putExtra("Error", "Đã xảy ra lỗi trong qua trình xử lý!");
+            startActivity(intent);
+        }
+    }
+
+    void updateWallet(long amount, String transId, String tempToken, String appId){
+        String nodePath = "users/" + temp.getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(nodePath);
+        long total= tempUser.getWallet() + amount;
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("wallet",total );
+        databaseReference.updateChildren(updates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        DatabaseReference transactionsRef = FirebaseDatabase.getInstance().getReference().child("transactions");
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        DatabaseReference abcRef = transactionsRef.child(currentUser.getUid());
+                        Date date= new Date();
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(date);
+
+                        Transaction transaction = new Transaction(transId,amount,"Payment Success", 200,formattedDate, tempToken,tempUser.getWallet(), tempUser.getWallet()+ amount );
+
+                        abcRef.child(transId).setValue(transaction);
+                        Intent intent = new Intent(PaymentActivity.this, SuccessActivity.class);
+                        intent.putExtra("transId", transId);
+                        startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Xử lý lỗi nếu cập nhật thất bại
+                    }
+                });
     }
 
     @Override
