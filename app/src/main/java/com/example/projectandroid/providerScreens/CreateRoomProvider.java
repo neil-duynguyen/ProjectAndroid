@@ -2,13 +2,17 @@ package com.example.projectandroid.providerScreens;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.projectandroid.R;
+import com.example.projectandroid.model.Post;
+import com.example.projectandroid.providerFragments.HomeFragmentProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,9 +28,9 @@ import java.util.Optional;
 public class CreateRoomProvider extends AppCompatActivity {
     EditText edImage, edAddress, edLocation, edDescription, edShortDescription, edPrice;
     Button btn_Create, btn_Cancel;
-
-    DatabaseReference databaseReference;
+    List<Post> listPost;
     List<Integer> listID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,32 +43,9 @@ public class CreateRoomProvider extends AppCompatActivity {
         edShortDescription = findViewById(R.id.edit_ShortDescription);
         edPrice = findViewById(R.id.edit_Price);
 
-        listID = new ArrayList<>();
+        final Integer[] id = {Integer.valueOf(getIntent().getStringExtra("id"))};
 
-        databaseReference =  FirebaseDatabase.getInstance().getReference().child("image");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String id = Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString();
-                    String[] parts = id.split("(?<=\\D)(?=\\d)"); // Sử dụng regex để tách theo biên giữa chữ và số
-                    String prefix = parts[0]; // Phần prefix: "image"
-                    String suffix = parts[1]; // Phần suffix: "1"
-                    listID.add(new Integer(suffix));
-                }
-                
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
 
-        //listID đang lỗi ko lấy ra dc
-        //lý do cần lấy ra là trong image có nhiều image1, 2, ...
-        //tui cần lấy ra con số đằng sau image để tạo đối tượng tiếp theo(1)
-        //và id của đối tượng đó sẽ là image + số thứ tự lớn nhất vừa lấy ra dc ++1
-        listID.size();
-        Optional<Integer> maxNumber = listID.stream().max(Integer::compare);;
 
         String temp = FirebaseAuth.getInstance().getCurrentUser().zzb().getUid(); //lấy user hiện tại
 
@@ -73,10 +54,51 @@ public class CreateRoomProvider extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("image"+"/"+"(1)");
+                Integer ID = ++id[0];
 
+                DatabaseReference myRef = database.getReference("image"+"/"+"image"+ID+"/"+"address");
+                myRef.setValue(edAddress.getText().toString());
+
+                DatabaseReference myRef1 = database.getReference("image"+"/"+"image"+ID+"/"+"description");
+                myRef1.setValue(edDescription.getText().toString());
+
+                DatabaseReference myRef2 = database.getReference("image"+"/"+"image"+ID+"/"+"id");
+                myRef2.setValue("image"+ID);
+
+                DatabaseReference myRef3 = database.getReference("image"+"/"+"image"+ID+"/"+"image");
+                myRef3.setValue(edImage.getText().toString());
+
+                DatabaseReference myRef4 = database.getReference("image"+"/"+"image"+ID+"/"+"location");
+                myRef4.setValue(edLocation.getText().toString());
+
+                DatabaseReference myRef5 = database.getReference("image"+"/"+"image"+ID+"/"+"price");
+                myRef5.setValue(Integer.valueOf(edPrice.getText().toString()));
+
+                DatabaseReference myRef6 = database.getReference("image"+"/"+"image"+ID+"/"+"shortDescription");
+                myRef6.setValue(Integer.valueOf(edPrice.getText().toString()));
+
+                DatabaseReference myRef7 = database.getReference("image"+"/"+"image"+ID+"/"+"userID");
+                myRef7.setValue(temp.toString());
             }
         });
+
+        btn_Cancel = findViewById(R.id.button_Huy);
+        btn_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CreateRoomProvider.this, "Tạo sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                loadFragment(new HomeFragmentProvider());
+            }
+        });
+    }
+    boolean loadFragment(Fragment fragment)
+    {
+        if(fragment != null)
+        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_containerProvider, fragment).commit();
+            return true;
+        }
+        return false;
     }
 }
 

@@ -37,6 +37,7 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
     private RecyclerView listRoom;
     private HomeAdapterProvider adapter;
     private List<Item> itemList;
+    private List<Item> listID;
     Button btnAddRoom;
     TextView tv_price_proviver;
 
@@ -52,15 +53,15 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         super.onViewCreated(view, savedInstanceState);
         listRoom = view.findViewById(R.id.list_room_provider);
         itemList = new ArrayList<>();
+        listID = new ArrayList<>();
 
-        String temp = FirebaseAuth.getInstance().getCurrentUser().zzb().getUid(); //lấy user hiện tại
-
+        //code lụi
         FirebaseDatabase.getInstance().getReference().child("image")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                             Item item = new Item(
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Item item = new Item(
                                     Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
@@ -70,17 +71,47 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
                                     Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("address").getValue()).toString()
                             );
-                              if(temp.equals(Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString())){
-                                itemList.add(item);
-                            }
+                            listID.add(item);
                         }
                         adapter.notifyDataSetChanged();
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });
+
+        String temp = FirebaseAuth.getInstance().getCurrentUser().zzb().getUid(); //lấy user hiện tại
+        FirebaseDatabase.getInstance().getReference().child("image")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Item item = new Item(
+                                    Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("address").getValue()).toString()
+                            );
+
+                            if (temp.equals(Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString())) {
+                                itemList.add(item);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
         adapter = new HomeAdapterProvider(getContext(), itemList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -114,10 +145,13 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(amount < priceCost[0]) {
+                if (amount < priceCost[0]) {
                     startActivity(new Intent(getContext(), PaymentActivity.class));
+                } else {
+                    Intent intent = new Intent(getContext(), CreateRoomProvider.class);
+                    intent.putExtra("id", listID.size()+"");
+                    startActivity(intent);
                 }
-                startActivity(new Intent(getContext(), CreateRoomProvider.class));
             }
         });
     }

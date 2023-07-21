@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:maxLines="3"
-            android:text="0VND"
+            android:text="100000000VND"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp"
