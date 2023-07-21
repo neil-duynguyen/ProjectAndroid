@@ -59,7 +59,12 @@ public class CreateRoomProvider extends AppCompatActivity {
             }
         });
 
-        Optional<Integer> maxNumber = listID.stream().max(Integer::compare);
+        //listID đang lỗi ko lấy ra dc
+        //lý do cần lấy ra là trong image có nhiều image1, 2, ...
+        //tui cần lấy ra con số đằng sau image để tạo đối tượng tiếp theo(1)
+        //và id của đối tượng đó sẽ là image + số thứ tự lớn nhất vừa lấy ra dc ++1
+        listID.size();
+        Optional<Integer> maxNumber = listID.stream().max(Integer::compare);;
 
         String temp = FirebaseAuth.getInstance().getCurrentUser().zzb().getUid(); //lấy user hiện tại
 
@@ -68,7 +73,7 @@ public class CreateRoomProvider extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("image");
+                DatabaseReference myRef = database.getReference("image"+"/"+"(1)");
 
             }
         });
