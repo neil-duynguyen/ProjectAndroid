@@ -1,8 +1,9 @@
 package com.example.projectandroid.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction  implements Serializable {
     public String TransactionId ;
     public long Amount ;
     public String Result;

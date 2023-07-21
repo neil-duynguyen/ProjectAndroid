@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.adapters.HomeAdapter;
 import com.example.projectandroid.listeners.ItemListener;
-import com.example.projectandroid.listeners.LogoutListener;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.HomeProviderActivity;

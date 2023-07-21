@@ -24,7 +24,7 @@
 
     <LinearLayout
         android:background="@drawable/layout_bg"
-        android:layout_marginTop="315dp"
+        android:layout_marginTop="350dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
@@ -83,7 +83,7 @@
                 <TextView
                     android:gravity="right"
 
-                    android:text="+20000 VNĐ"
+                    android:text="+ 20000 VNĐ"
                     android:textStyle="bold"
                     android:id="@+id/success_amount"
                     android:layout_marginLeft="16dp"
@@ -144,6 +144,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:text="status: dsgsdvcxvxcv"
+
+                    android:textStyle="bold"
+                    android:id="@+id/success_status"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColorHint="@color/black"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
                     android:text="Result: dsgsdvcxvxcv"
 
                     android:textStyle="bold"
@@ -157,10 +170,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:text="status: dsgsdvcxvxcv"
+                    android:text="Date: dsgsdvcxvxcv"
 
                     android:textStyle="bold"
-                    android:id="@+id/success_status"
+                    android:id="@+id/success_date"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:textColorHint="@color/black"
@@ -171,8 +184,9 @@
                     android:layout_height="wrap_content"/>
 
 
+
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sign_up_button"
+                    android:id="@+id/success_button"
                     android:padding="16dp"
                     android:layout_margin="16dp"
                     android:text="Go to Wallet"
