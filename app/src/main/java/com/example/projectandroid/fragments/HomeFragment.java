@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment implements ItemListener {
     private HomeAdapter adapter;
     private List<Item> itemList;
     TextView tvName, tvRole;
+
     ImageView btnLogout;
     de.hdodenhof.circleimageview.CircleImageView userProfile;
 
@@ -68,6 +70,7 @@ public class HomeFragment extends Fragment implements ItemListener {
         tvRole = view.findViewById(R.id.home_frag_role);
         userProfile =view.findViewById(R.id.profile_image);
         btnLogout = view.findViewById(R.id.home_frag_logout);
+
 
         itemList = new ArrayList<>();
 //        itemList.add(new Item("Street # 1, Pakistan", "$ 200", "1 bedroom"));
@@ -109,12 +112,11 @@ public class HomeFragment extends Fragment implements ItemListener {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //logout();
-                startActivity(new Intent(getContext(), PaymentActivity.class));
+                logout();
+                //startActivity(new Intent(getContext(), PaymentActivity.class));
             }
         });
     }
-
     @Override
     public void OnItemPosition(int position) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
