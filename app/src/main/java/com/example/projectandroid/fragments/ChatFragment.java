@@ -4,32 +4,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.example.projectandroid.R;
 import com.example.projectandroid.adapters.ChatAdapter;
+import com.example.projectandroid.model.Message;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ChatFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private ListView listView;
     private EditText editTextMessage;
     private Button btnSend;
     private DatabaseReference databaseReference;
-    private List<String> messages;
+    private List<Message> messages;
+    private String currentUserID;
     private ChatAdapter chatAdapter;
 
     public ChatFragment() {
@@ -42,16 +45,22 @@ public class ChatFragment extends Fragment {
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("messages");
         messages = new ArrayList<>();
-        chatAdapter = new ChatAdapter(messages);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            currentUserID = currentUser.getEmail();
+        } else {
+            // Handle the case when the user is not signed in or authentication fails
+            currentUserID = null;
+        }
+        chatAdapter = new ChatAdapter(messages, currentUserID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(chatAdapter);
+        listView = view.findViewById(R.id.list_view);
+        listView.setAdapter(chatAdapter);
         editTextMessage = view.findViewById(R.id.edit_text_message);
         btnSend = view.findViewById(R.id.btn_send);
         return view;
@@ -65,10 +74,10 @@ public class ChatFragment extends Fragment {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                String message = dataSnapshot.getValue(String.class);
+                Message message = dataSnapshot.getValue(Message.class);
                 messages.add(message);
                 chatAdapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(messages.size() - 1);
+                listView.smoothScrollToPosition(messages.size() - 1);
             }
 
             @Override
@@ -98,10 +107,14 @@ public class ChatFragment extends Fragment {
     }
 
     private void sendMessage(String message) {
-        // Push the new message to the Firebase Database
-        String key = databaseReference.push().getKey();
-        Map<String, Object> messageValues = new HashMap<>();
-        messageValues.put(key, message);
-        databaseReference.updateChildren(messageValues);
+        if (currentUserID != null) {
+            // Push the new message to the Firebase Database
+            String key = databaseReference.push().getKey();
+            Message newMessage = new Message(currentUserID, message);
+            databaseReference.child(key).setValue(newMessage);
+        } else {
+            // Handle the case when the user is not signed in or authentication fails
+        }
     }
 }
+

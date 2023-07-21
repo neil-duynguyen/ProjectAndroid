@@ -3,52 +3,59 @@ package com.example.projectandroid.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.view.Gravity;
 import com.example.projectandroid.R;
+import com.example.projectandroid.model.Message;
+import android.util.Log;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
+public class ChatAdapter extends BaseAdapter {
 
-    private List<String> messages;
+    private List<Message> messages;
+    private String currentUserID;
 
-    public ChatAdapter(List<String> messages) {
+    public ChatAdapter(List<Message> messages, String currentUserID) {
         this.messages = messages;
-    }
-
-    @NonNull
-    @Override
-    public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
-        return new ChatViewHolder(view);
+        this.currentUserID = currentUserID;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
-        String message = messages.get(position);
-        holder.bindMessage(message);
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return messages.size();
     }
 
-    static class ChatViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public Object getItem(int position) {
+        return messages.get(position);
+    }
 
-        private TextView tvMessage;
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-        public ChatViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvMessage = itemView.findViewById(R.id.tv_message);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Message message = messages.get(position);
+
+        if (message.getUsername().equals(currentUserID)) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_sent, parent, false);
+        } else {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_received, parent, false);
         }
 
-        public void bindMessage(String message) {
-            tvMessage.setText(message);
-        }
+        TextView tvUsername = convertView.findViewById(R.id.tv_username);
+        TextView tvMessage = convertView.findViewById(R.id.tv_message);
+
+        // Set email và tin nhắn
+        tvUsername.setText(message.getUsername());
+        tvMessage.setText(message.getContent());
+
+        return convertView;
     }
 }
+
 
