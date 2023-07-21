@@ -19,6 +19,8 @@ import com.example.projectandroid.R;
 import com.example.projectandroid.adaptersProvider.HomeAdapterProvider;
 import com.example.projectandroid.listeners.ItemListener;
 import com.example.projectandroid.model.Item;
+import com.example.projectandroid.model.Post;
+import com.example.projectandroid.model.Transaction;
 import com.example.projectandroid.providerScreens.CreateRoomProvider;
 import com.example.projectandroid.providerScreens.DetailsProviderActivity;
 import com.example.projectandroid.providerScreens.PaymentActivity;
@@ -62,6 +64,7 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Item item = new Item(
+
                                     Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
@@ -87,19 +90,22 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        itemList.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            Item item = new Item(
-                                    Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("address").getValue()).toString()
-                            );
+                            Post post = dataSnapshot.getValue(Post.class);
+
 
                             if (temp.equals(Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString())) {
+                                Item item =new Item();
+                                item.setId(post.id);
+                                item.setUserID(post.userID);
+                                item.setAddress(post.address);
+                                item.setImage(post.image);
+                                item.setLocation(post.location);
+                                item.setShortDescription(post.shortDescription);
+                                item.setDescription(post.description);
+                                item.setPrice(String.valueOf(post.price));
+
                                 itemList.add(item);
                             }
                         }

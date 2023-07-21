@@ -19,6 +19,7 @@ import com.example.projectandroid.R;
 import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.HomeProviderActivity;
 import com.example.projectandroid.providerScreens.PickerActivity;
+import com.example.projectandroid.providerScreens.SelectImageActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-                startActivity(new Intent(LoginActivity.this, PickerActivity.class));
+                startActivity(new Intent(LoginActivity.this, SelectImageActivity.class));
             }
         });
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.providerFragments.HomeFragmentProvider;
+import com.example.projectandroid.screens.DetailsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -82,7 +84,7 @@ public class DetailsProviderActivity extends AppCompatActivity {
 
     private void onClickDeleteData(String id) {
         AlertDialog.Builder dialogXoa = new AlertDialog.Builder(this);
-        dialogXoa.setMessage("Bạn đã chắc chắn.");
+        dialogXoa.setMessage("Are you sure to delete?");
         dialogXoa.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -116,7 +118,9 @@ public class DetailsProviderActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(DetailsProviderActivity.this, "Data Updated Successfully", Toast.LENGTH_LONG).show();
+
                 Fragment fragment = new HomeFragmentProvider();
+                Intent intent = new Intent(DetailsProviderActivity.this, HomeProviderActivity.class);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

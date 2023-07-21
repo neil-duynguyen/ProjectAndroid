@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -74,8 +76,14 @@ public class PickerActivity extends AppCompatActivity  implements OnMapReadyCall
                 if (selectedLocation != null) {
                     // Hiển thị Toast chứa tọa độ của điểm được chọn
                     Toast.makeText(PickerActivity.this, "Đã chọn vị trí: " + selectedLocation.latitude + ", " + selectedLocation.longitude, Toast.LENGTH_SHORT).show();
-                    // Đóng dialog sau khi lưu thành công
+                    String location = selectedLocation.latitude + "," + selectedLocation.longitude;
+                    // Tạo Intent để quay lại trang trước
+                    Intent intent = new Intent();
                     dialog.dismiss();
+                    intent.putExtra("location",location);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+
                 } else {
                     Toast.makeText(PickerActivity.this, "Vui lòng chọn vị trí trên bản đồ", Toast.LENGTH_SHORT).show();
                 }
