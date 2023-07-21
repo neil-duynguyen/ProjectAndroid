@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         tvErr = findViewById(R.id.sign_in_error);
         tvErr.setVisibility(View.GONE);
 
-        email.setText("test2@gmail.com");
+        email.setText("test1@gmail.com");
         //password.setText(000000);
 
         mAuth = FirebaseAuth.getInstance();

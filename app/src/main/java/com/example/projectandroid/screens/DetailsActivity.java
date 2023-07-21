@@ -3,13 +3,16 @@ package com.example.projectandroid.screens;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.fragments.HomeFragment;
+import com.example.projectandroid.fragments.StoreMapActivity;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,14 +23,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DetailsActivity extends AppCompatActivity {
 
     private ImageView imageView;
+    ImageView map;
     private TextView price, shortDescription, description, nameUser;
 
     de.hdodenhof.circleimageview.CircleImageView imgProfile;
     String pri , des;
     String img , shor , id;
+    Item item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +47,25 @@ public class DetailsActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
         nameUser = findViewById(R.id.home_frag_user_name);
         imgProfile = findViewById(R.id.profile_image_detail);
+        map = (ImageView) findViewById(R.id.map);
 
         pri = getIntent().getStringExtra("price");
         des = getIntent().getStringExtra("description");
         img = getIntent().getStringExtra("image");
         shor = getIntent().getStringExtra("shortDescription");
         id = getIntent().getStringExtra("id");
+        item= new Item();
+        getPost(id);
+
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailsActivity.this, StoreMapActivity.class);
+                intent.putExtra("location", item.getLocation());
+                startActivity(intent);
+            }
+        });
 
 //        DatabaseReference providerID = FirebaseDatabase.getInstance().getReference("image");
 //        //providerID.child(id).getKey();
@@ -85,5 +106,25 @@ public class DetailsActivity extends AppCompatActivity {
                 .centerCrop()
                 .placeholder(R.drawable.ic_account)
                 .into(imageView);
+    }
+
+    private void getPost(String Id) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("image");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
+                    if(productSnapshot.getKey().equals(id)){
+                        item = productSnapshot.getValue(Item.class);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Xử lý khi có lỗi xảy ra.
+            }
+        });
+
     }
 }

@@ -95,6 +95,7 @@
                 android:layout_height="wrap_content"/>
 
                 <EditText
+                    android:text="000000"
                     android:id="@+id/user_password"
                     android:layout_margin="16dp"
                     android:hint="Password"
