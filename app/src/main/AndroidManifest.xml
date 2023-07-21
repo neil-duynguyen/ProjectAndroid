@@ -26,6 +26,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/keyAPI" />
 
+
+<activity
+            android:name=".providerScreens.CreateRoomProvider"
+            android:exported="false" />
         <activity
             android:name=".providerScreens.DetailsProviderActivity"
             android:exported="false" />
