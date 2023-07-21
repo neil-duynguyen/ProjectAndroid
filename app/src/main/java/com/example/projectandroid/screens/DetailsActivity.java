@@ -3,10 +3,7 @@ package com.example.projectandroid.screens;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +12,6 @@ import com.example.projectandroid.R;
 import com.example.projectandroid.fragments.HomeFragment;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.User;
-import com.example.projectandroid.providerScreens.StoreMapActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,20 +39,13 @@ public class DetailsActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
         nameUser = findViewById(R.id.home_frag_user_name);
         imgProfile = findViewById(R.id.profile_image_detail);
-        Button testmap = findViewById(R.id.buttonMap);
+
         pri = getIntent().getStringExtra("price");
         des = getIntent().getStringExtra("description");
         img = getIntent().getStringExtra("image");
         shor = getIntent().getStringExtra("shortDescription");
         id = getIntent().getStringExtra("id");
 
-        testmap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailsActivity.this, StoreMapActivity.class);
-                startActivity(intent);
-            }
-        });
 //        DatabaseReference providerID = FirebaseDatabase.getInstance().getReference("image");
 //        //providerID.child(id).getKey();
 //        providerID.addValueEventListener(new ValueEventListener() {
