@@ -16,13 +16,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.projectandroid.R;
-import com.example.projectandroid.adapters.HomeAdapter;
 import com.example.projectandroid.adaptersProvider.HomeAdapterProvider;
 import com.example.projectandroid.listeners.ItemListener;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.providerScreens.DetailsProviderActivity;
 import com.example.projectandroid.providerScreens.PaymentActivity;
-import com.example.projectandroid.screens.DetailsActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,21 +52,28 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         listRoom = view.findViewById(R.id.list_room_provider);
         itemList = new ArrayList<>();
 
-
+        String temp = FirebaseAuth.getInstance().getCurrentUser().zzb().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
         FirebaseDatabase.getInstance().getReference().child("image")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            itemList.add(new Item(
+                             Item item = new Item(
                                     Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString()
+                                    Objects.requireNonNull(dataSnapshot.child("id").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("address").getValue()).toString()
+                            );
+                              if(temp.equals(Objects.requireNonNull(dataSnapshot.child("userID").getValue()).toString())){
+                                itemList.add(item);
+                            }
 
-                            ));
+
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -95,7 +101,7 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                 Integer price = (Integer) snapshot.getValue(Integer.class);
+                Integer price = (Integer) snapshot.getValue(Integer.class);
                 priceCost[0] = price;
             }
 

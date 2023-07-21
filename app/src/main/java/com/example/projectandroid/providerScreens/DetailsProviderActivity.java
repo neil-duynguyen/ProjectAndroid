@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -80,15 +81,28 @@ public class DetailsProviderActivity extends AppCompatActivity {
     }
 
     private void onClickDeleteData(String id) {
-        databaseReference = FirebaseDatabase.getInstance().getReference("image");
-        databaseReference.child(id).removeValue(new DatabaseReference.CompletionListener() {
+        AlertDialog.Builder dialogXoa = new AlertDialog.Builder(this);
+        dialogXoa.setMessage("Bạn đã chắc chắn.");
+        dialogXoa.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Toast.makeText(DetailsProviderActivity.this, "Delete data success", Toast.LENGTH_SHORT).show();
-                Fragment fragment = new HomeFragmentProvider();
+            public void onClick(DialogInterface dialog, int which) {
+                databaseReference = FirebaseDatabase.getInstance().getReference("image");
+                databaseReference.child(id).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        Toast.makeText(DetailsProviderActivity.this, "Delete data success", Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new HomeFragmentProvider();
+                    }
+                });
             }
         });
+        dialogXoa.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        dialogXoa.show();
     }
 
     private void updateData(String des, Integer pri, String shortD, String id) {
@@ -101,13 +115,13 @@ public class DetailsProviderActivity extends AppCompatActivity {
         databaseReference.child(id).updateChildren(object).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                Toast.makeText(DetailsProviderActivity.this, "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsProviderActivity.this, "Data Updated Successfully", Toast.LENGTH_LONG).show();
                 Fragment fragment = new HomeFragmentProvider();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DetailsProviderActivity.this, "Error While Updating", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsProviderActivity.this, "Error While Updating", Toast.LENGTH_LONG).show();
             }
         });
     }

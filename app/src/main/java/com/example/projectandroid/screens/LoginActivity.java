@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User object = snapshot.getValue(User.class);
                         // Xử lý object ở đây
-                        if(snapshot.getKey().equals(temp.getUid())){
+                            if(snapshot.getKey().equals(temp.getUid())){
                             if(object.getRole().equals("renter")){
                                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                 finishAffinity();
