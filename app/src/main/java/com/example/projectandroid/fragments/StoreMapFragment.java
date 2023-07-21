@@ -13,8 +13,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class StoreMapFragment {
-    private final double STORE_LATITUDE = 10.876274472837375;
-    private final double STORE_LONGITUDE = 106.80128522422662;
+     public  double STORE_LATITUDE = 0;
+     public  double STORE_LONGITUDE = 0;
     private GoogleMap _googleMap;
     private Marker _storeMarker;
     private Marker _activatingMarker;
