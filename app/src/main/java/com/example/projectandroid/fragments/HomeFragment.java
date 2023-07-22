@@ -84,6 +84,7 @@ public class HomeFragment extends Fragment implements ItemListener {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                             itemList.add(new Item(
+                                    Objects.requireNonNull(dataSnapshot.child("address").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
@@ -120,6 +121,7 @@ public class HomeFragment extends Fragment implements ItemListener {
     @Override
     public void OnItemPosition(int position) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("address", itemList.get(position).getAddress());
         intent.putExtra("price", itemList.get(position).getPrice());
         intent.putExtra("location", itemList.get(position).getLocation());
         intent.putExtra("description", itemList.get(position).getDescription());

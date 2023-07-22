@@ -23,4 +23,6 @@ public class Post {
         this.userID = userID;
         this.address = address;
     }
+
+
 }

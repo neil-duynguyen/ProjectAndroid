@@ -32,11 +32,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     private ImageView imageView;
     ImageView map;
-    private TextView price, shortDescription, description, nameUser;
+    private TextView price, shortDescription, description, nameUser, address;
 
     de.hdodenhof.circleimageview.CircleImageView imgProfile;
     String pri , des;
-    String img , shor , id;
+    String img , shor , id, addr;
     Post item;
     User Provider ;
     @Override
@@ -50,13 +50,21 @@ public class DetailsActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
         nameUser = findViewById(R.id.home_frag_user_name);
         imgProfile = findViewById(R.id.profile_image_detail);
+        address = findViewById(R.id.tv_Address);
+
         map = (ImageView) findViewById(R.id.map);
+
         getProviderAccount() ;
+
+        addr = getIntent().getStringExtra("address");
         pri = getIntent().getStringExtra("price");
         des = getIntent().getStringExtra("description");
         img = getIntent().getStringExtra("image");
         shor = getIntent().getStringExtra("shortDescription");
         id = getIntent().getStringExtra("id");
+
+
+
         item= new Post();
         getPost(id);
 
@@ -105,6 +113,7 @@ public class DetailsActivity extends AppCompatActivity {
         price.setText(pri + "VND");
         description.setText(des);
         shortDescription.setText(shor);
+        address.setText(addr);
         Glide
                 .with(this)
                 .load(img)
