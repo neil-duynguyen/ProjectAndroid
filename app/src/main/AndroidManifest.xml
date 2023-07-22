@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".UserManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManagerHomeActivity"
             android:exported="false" />
         <activity

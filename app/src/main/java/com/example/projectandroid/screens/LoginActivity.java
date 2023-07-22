@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
+import com.example.projectandroid.UserManagerActivity;
 import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.HomeProviderActivity;
 import com.example.projectandroid.providerScreens.PickerActivity;
@@ -152,6 +153,9 @@ public class LoginActivity extends AppCompatActivity {
                                 finishAffinity();
                             }else if(object.getRole().equals("provider")){
                                 startActivity(new Intent(LoginActivity.this, HomeProviderActivity.class));
+                                finishAffinity();
+                            }else if(object.getRole().equals("manager")){
+                                startActivity(new Intent(LoginActivity.this, UserManagerActivity.class));
                                 finishAffinity();
                             }
                         }

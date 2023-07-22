@@ -14,13 +14,13 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email,long wallet, String image,String Role,String Phone) {
+    public User(String name, String email, String image, long wallet, String role, String phone) {
         this.name = name;
         this.email = email;
-        this.wallet = wallet;
         this.image = image;
-        this.role = Role;
-        this.phone = Phone;
+        this.wallet = wallet;
+        this.role = role;
+        this.phone = phone;
     }
 
     public String getName() {
@@ -68,6 +68,6 @@ public class User {
     }
 
     public void setPhone(String phone) {
-        phone = phone;
+        this.phone = phone;
     }
 }

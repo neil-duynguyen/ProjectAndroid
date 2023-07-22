@@ -133,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 String role = spinner.getSelectedItem().toString();
                 String avartar = "https://firebasestorage.googleapis.com/v0/b/rentalhome-df2d1.appspot.com/o/60111.jpg?alt=media&token=23b1b40d-379c-49cf-b05c-10c2f3b34e96";
-                user = new User(name, email, 0, avartar,role,Phone );
+                user = new User(name, email, avartar, 0,role,Phone );
 
                 if (task.isSuccessful()) {
 
