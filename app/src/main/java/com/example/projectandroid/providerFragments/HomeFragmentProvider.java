@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
@@ -157,6 +158,7 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
             @Override
             public void onClick(View v) {
                 if (price < priceCost[0]) {
+                    Toast.makeText(getContext(), "Your wallet not enuoung to create new post! Please recharge", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getContext(), PaymentActivity.class));
                 } else {
                     Intent intent = new Intent(getContext(), CreateRoomProvider.class);

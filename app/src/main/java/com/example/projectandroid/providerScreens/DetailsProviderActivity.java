@@ -118,8 +118,6 @@ public class DetailsProviderActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(DetailsProviderActivity.this, "Data Updated Successfully", Toast.LENGTH_LONG).show();
-
-                Fragment fragment = new HomeFragmentProvider();
                 Intent intent = new Intent(DetailsProviderActivity.this, HomeProviderActivity.class);
             }
         }).addOnFailureListener(new OnFailureListener() {

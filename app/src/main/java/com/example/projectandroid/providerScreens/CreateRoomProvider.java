@@ -81,12 +81,14 @@ public class CreateRoomProvider extends AppCompatActivity{
     ProgressDialog progressDialog;
     FirebaseUser temp;
     User tempUser;
+    long price;
 
     final Integer[] priceCost = new Integer[1];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room_provider);
+        setInfor();
         getUser();
 
         //String currency = price.substring(price.length() - 3);
@@ -166,6 +168,33 @@ public class CreateRoomProvider extends AppCompatActivity{
             }
         });
     }
+
+
+    public void setInfor(){
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Lấy dữ liệu từ danh sách và xử lý
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    // Xử lý object ở đây
+                    if(snapshot.getKey().equals(currentUser.getUid())){
+                        price = user.getWallet();
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+            }
+        });
+    }
     boolean loadFragment(Fragment fragment)
     {
         if(fragment != null)
@@ -230,7 +259,7 @@ public class CreateRoomProvider extends AppCompatActivity{
     void updateWallet(){
         String nodePath = "users/" + temp.getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(nodePath);
-        long total= tempUser.getWallet() - priceCost[0];
+        long total= price - Long.parseLong(priceCost[0].toString());
         Map<String, Object> updates = new HashMap<>();
         updates.put("wallet",total );
         databaseReference.updateChildren(updates)

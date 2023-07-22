@@ -65,8 +65,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
-        holder.price.setText("$" + itemList.get(position).getPrice());
-        holder.location.setText(itemList.get(position).getLocation());
+        holder.price.setText( itemList.get(position).getPrice() + "VNĐ");
+        holder.location.setText(itemList.get(position).getAddress());
         holder.shortDecription.setText(itemList.get(position).getShortDescription());
         Glide
                 .with(context)

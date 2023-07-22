@@ -16,6 +16,7 @@ import com.example.projectandroid.fragments.StoreMapActivity;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.Post;
 import com.example.projectandroid.model.User;
+import com.example.projectandroid.providerScreens.HomeProviderActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
     String pri , des;
     String img , shor , id;
     Post item;
+    User Provider ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,8 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
 //        DatabaseReference providerID = FirebaseDatabase.getInstance().getReference("image");
 //        //providerID.child(id).getKey();
@@ -107,6 +111,42 @@ public class DetailsActivity extends AppCompatActivity {
                 .centerCrop()
                 .placeholder(R.drawable.ic_account)
                 .into(imageView);
+    }
+
+
+    void getProviderAccount() {
+        FirebaseUser temp = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (temp != null) {
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // Lấy dữ liệu từ danh sách và xử lý
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User object = snapshot.getValue(User.class);
+                        // Xử lý object ở đây
+                        if (snapshot.getKey().equals(temp.getUid())) {
+                            Provider = object;
+                            Glide
+                                    .with(DetailsActivity.this)
+                                    .load(object.getImage())
+                                    .centerCrop()
+                                    .placeholder(R.drawable.ic_account)
+                                    .into(imgProfile);
+                            nameUser.setText(object.getName());
+
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Xử lý lỗi nếu có
+                }
+            });
+        }
     }
 
     private void getPost(String Id) {
