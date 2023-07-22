@@ -15,16 +15,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.adaptersProvider.HomeAdapterProvider;
+import com.example.projectandroid.fragments.HomeFragment;
 import com.example.projectandroid.listeners.ItemListener;
 import com.example.projectandroid.model.Item;
 import com.example.projectandroid.model.Post;
 import com.example.projectandroid.model.Transaction;
+import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerScreens.CreateRoomProvider;
 import com.example.projectandroid.providerScreens.DetailsProviderActivity;
 import com.example.projectandroid.providerScreens.PaymentActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +41,7 @@ import java.util.Objects;
 
 public class HomeFragmentProvider extends Fragment implements ItemListener {
     private RecyclerView listRoom;
+    long price;
     private HomeAdapterProvider adapter;
     private List<Item> itemList;
     private List<Item> listID;
@@ -127,8 +132,8 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         //xử lý số tiền của provider
         //tách chuỗi
         tv_price_proviver = view.findViewById(R.id.price_provider);
-        String price = tv_price_proviver.getText().toString();
-        Integer amount = Integer.valueOf(price.substring(0, price.length() - 3));
+        setInfor();
+
         //String currency = price.substring(price.length() - 3);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("pricePost");
@@ -151,7 +156,7 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (amount < priceCost[0]) {
+                if (price < priceCost[0]) {
                     startActivity(new Intent(getContext(), PaymentActivity.class));
                 } else {
                     Intent intent = new Intent(getContext(), CreateRoomProvider.class);
@@ -172,5 +177,31 @@ public class HomeFragmentProvider extends Fragment implements ItemListener {
         intent.putExtra("image", itemList.get(position).getImage());
         intent.putExtra("id", itemList.get(position).getId());
         startActivity(intent);
+    }
+
+    public void setInfor(){
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Lấy dữ liệu từ danh sách và xử lý
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    // Xử lý object ở đây
+                    if(snapshot.getKey().equals(currentUser.getUid())){
+                        price = user.getWallet();
+                        tv_price_proviver.setText(user.getWallet()+ " VNĐ");
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+            }
+        });
     }
 }

@@ -2,12 +2,14 @@ package com.example.projectandroid.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -16,11 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.projectandroid.R;
 import com.example.projectandroid.model.User;
+import com.example.projectandroid.screens.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AccountFragment extends Fragment {
 
     private CircleImageView userProfile;
-    private EditText userName, userEmail;
+    private TextView userName, userEmail;
     private AppCompatButton updateButton;
     private DatabaseReference ref;
     private int Pick_Image = 1;
@@ -62,7 +66,7 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*userProfile = view.findViewById(R.id.profile_image);
+        userProfile = view.findViewById(R.id.profile_image);
         userName = view.findViewById(R.id.user_name);
         userEmail = view.findViewById(R.id.user_email);
         updateButton = view.findViewById(R.id.update_button);
@@ -107,24 +111,47 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        userProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Selected Picture"), Pick_Image);
-            }
-        });
+
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImage();
+                logout();
             }
         });
-*/
+
+
     }
+    public void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Thực hiện logout ở đây
+                performLogout();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Đóng hộp thoại xác nhận
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void performLogout() {
+        FirebaseAuth.getInstance().signOut();
+
+        startActivity(new Intent(getContext(), LoginActivity.class));
+
+    }
+
 
 
     @Override

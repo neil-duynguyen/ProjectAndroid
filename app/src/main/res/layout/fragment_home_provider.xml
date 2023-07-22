@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/drak_orange"
-        android:textSize="32sp"/>
+        android:textSize="20sp"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
@@ -25,16 +25,18 @@
         app:cardCornerRadius="16dp"
         android:backgroundTint="@color/drak_orange"
         android:layout_margin="16dp"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp">
 
         <TextView
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:id="@+id/price_provider"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
             android:maxLines="3"
-            android:text="100000000VND"
+            android:text="đàasdaczxc"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -43,11 +45,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_room_provider"
-        android:layout_margin="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="560dp"/>
+        android:layout_height="560dp"
+        android:layout_below="@id/card_view"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_addRoom"

@@ -27,12 +27,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.regex.Pattern;
+
 
 public class SignUpActivity extends AppCompatActivity {
     User user;
     private TextView haveAccount;
     private FirebaseAuth mAuth;
-    private EditText userName, userEmail, userPassword, confirmPassword;
+    private EditText userName, userEmail, userPassword, confirmPassword , tvPhone;
     private AppCompatButton signUpButton;
     private DatabaseReference mRef;
     ProgressDialog dialog;
@@ -51,6 +53,8 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.user_confirm_password);
         signUpButton = findViewById(R.id.sign_up_button);
         spinner = findViewById(R.id.user_role);
+        tvPhone = findViewById(R.id.user_phone);
+
         err = findViewById(R.id.sign_up_error);
         err.setVisibility(View.GONE);
         String[] items = {"renter", "provider"};
@@ -84,15 +88,25 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 } else if (!userPassword.getText().toString().trim().equals(confirmPassword.getText().toString().trim())) {
                     Toast.makeText(SignUpActivity.this, "Enter valid password", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
+
                     if (emailChecker(userEmail.getText().toString().trim())) {
-                        createUser(userEmail.getText().toString().trim(),
-                                userPassword.getText().toString().trim(),
-                                userName.getText().toString().trim());
+                        boolean isValid = isValidPhoneNumber(tvPhone.getText().toString());
+                        if (isValid) {
+                            createUser(userEmail.getText().toString().trim(),
+                                    userPassword.getText().toString().trim(),
+                                    userName.getText().toString().trim(), tvPhone.getText().toString().trim());
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Enter valid phone", Toast.LENGTH_SHORT).show();
+
+                        }
+
                     } else {
                         Toast.makeText(SignUpActivity.this, "Enter valid email", Toast.LENGTH_SHORT).show();
                     }
                 }
+
 
             }
         });
@@ -100,11 +114,17 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    boolean isValidPhoneNumber(String phoneNumber) {
+        // Định dạng cho số điện thoại: chính xác 10 chữ số
+        String phonePattern = "^[0-9]{10}$";
+        return Pattern.matches(phonePattern, phoneNumber);
+    }
+
     boolean emailChecker(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    void createUser(String email, String password, String name) {
+    void createUser(String email, String password, String name, String Phone) {
         dialog.setTitle("Sign Up");
         dialog.setMessage("");
         dialog.show();
@@ -113,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 String role = spinner.getSelectedItem().toString();
                 String avartar = "https://firebasestorage.googleapis.com/v0/b/rentalhome-df2d1.appspot.com/o/60111.jpg?alt=media&token=23b1b40d-379c-49cf-b05c-10c2f3b34e96";
-                user = new User(name, email, 0, avartar,role);
+                user = new User(name, email, 0, avartar,role,Phone );
 
                 if (task.isSuccessful()) {
 
@@ -158,6 +178,7 @@ public class SignUpActivity extends AppCompatActivity {
         userRef.child("image").setValue(user.getImage());
         userRef.child("wallet").setValue(user.getWallet());
         userRef.child("role").setValue(user.getRole());
+        userRef.child("phone").setValue(user.getPhone());
 
     }
 }

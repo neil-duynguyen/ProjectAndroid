@@ -8,16 +8,19 @@ public class User {
     private long wallet;
     private String role ;
 
+    private String phone;
+
 
     public User() {
     }
 
-    public User(String name, String email,long wallet, String image,String Role) {
+    public User(String name, String email,long wallet, String image,String Role,String Phone) {
         this.name = name;
         this.email = email;
         this.wallet = wallet;
         this.image = image;
         this.role = Role;
+        this.phone = Phone;
     }
 
     public String getName() {
@@ -58,5 +61,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        phone = phone;
     }
 }

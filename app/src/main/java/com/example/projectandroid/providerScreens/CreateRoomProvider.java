@@ -27,7 +27,10 @@ import android.widget.Toast;
 import com.example.projectandroid.R;
 import com.example.projectandroid.fragments.HomeFragment;
 import com.example.projectandroid.model.Post;
+import com.example.projectandroid.model.Transaction;
+import com.example.projectandroid.model.User;
 import com.example.projectandroid.providerFragments.HomeFragmentProvider;
+import com.example.projectandroid.screens.LoginActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,17 +39,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -69,13 +79,32 @@ public class CreateRoomProvider extends AppCompatActivity{
     private FusedLocationProviderClient fusedLocationClient;
     private AlertDialog dialog; // Khai báo biến dialog là biến toàn cục
     ProgressDialog progressDialog;
+    FirebaseUser temp;
+    User tempUser;
 
-
+    final Integer[] priceCost = new Integer[1];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room_provider);
+        getUser();
 
+        //String currency = price.substring(price.length() - 3);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("pricePost");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer price = (Integer) snapshot.getValue(Integer.class);
+                priceCost[0] = price;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         btnImage = findViewById(R.id.edit_Image);
         edAddress = findViewById(R.id.edit_Address);
         btnLocattion= findViewById(R.id.edit_Location);
@@ -122,7 +151,7 @@ public class CreateRoomProvider extends AppCompatActivity{
                 myRef.setValue(post, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        startActivity(new Intent(CreateRoomProvider.this, HomeProviderActivity.class));
+                        updateWallet();
                     }
                 });
             }
@@ -145,6 +174,19 @@ public class CreateRoomProvider extends AppCompatActivity{
             return true;
         }
         return false;
+    }
+
+    private void getUser() {
+
+        temp = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(temp!=null){
+
+        }else{
+            Intent intent = new Intent(CreateRoomProvider.this, LoginActivity.class);
+            intent.putExtra("Error", "Đã xảy ra lỗi trong qua trình xử lý!");
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -181,6 +223,29 @@ public class CreateRoomProvider extends AppCompatActivity{
     public void btn_imageSelect_click(View view){
         Intent intent = new Intent(this, SelectImageActivity.class);
         startActivityForResult(intent, REQUEST_CODE_MY_ACTIVITY);
+    }
+
+
+
+    void updateWallet(){
+        String nodePath = "users/" + temp.getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(nodePath);
+        long total= tempUser.getWallet() - priceCost[0];
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("wallet",total );
+        databaseReference.updateChildren(updates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(CreateRoomProvider.this, HomeProviderActivity.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Xử lý lỗi nếu cập nhật thất bại
+                    }
+                });
     }
 }
 

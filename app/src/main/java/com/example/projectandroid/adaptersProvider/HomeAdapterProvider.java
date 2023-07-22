@@ -65,7 +65,7 @@ public class HomeAdapterProvider extends RecyclerView.Adapter<HomeAdapterProvide
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.price.setText(itemList.get(position).getPrice() + "VND");
-        holder.location.setText(itemList.get(position).getLocation());
+        holder.location.setText(itemList.get(position).getAddress());
         holder.shortDecription.setText(itemList.get(position).getShortDescription());
         Glide.with(context).load(itemList.get(position).getImage()).centerCrop().into(new CustomTarget<Drawable>() {
             @Override
