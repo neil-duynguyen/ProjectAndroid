@@ -45,7 +45,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/update_button"
-        android:text="Update"
+        android:text="Logout"
         android:background="@drawable/button_bg"
         android:layout_margin="16dp"
         android:textColor="@color/white"

@@ -5,15 +5,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -82,6 +91,8 @@ public class CreateRoomProvider extends AppCompatActivity{
     FirebaseUser temp;
     User tempUser;
     long price;
+    private static final String CHANNEL_ID = "0";
+    private  static int NOTIFICATION_ID = 1;
 
     final Integer[] priceCost = new Integer[1];
     @Override
@@ -266,6 +277,7 @@ public class CreateRoomProvider extends AppCompatActivity{
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        showNotification("Deducted money notification in wallet", "You have just published a post and "+priceCost[0]+"VND has been deducted from your account. Your account balance is now "+total+"VND.");
                         startActivity(new Intent(CreateRoomProvider.this, HomeProviderActivity.class));
                     }
                 })
@@ -275,6 +287,26 @@ public class CreateRoomProvider extends AppCompatActivity{
                         // Xử lý lỗi nếu cập nhật thất bại
                     }
                 });
+    }
+
+    private void showNotification(String title, String message) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,"Van Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            Notification notification = new Notification
+                    .Builder(this,CHANNEL_ID)
+                    .setSmallIcon(R.drawable.baseline_doorbell_24)
+//                    .setLargeIcon(bitmap)
+                    .setContentText(message)
+                    .setContentTitle(title)
+                    .setColor(getColor(R.color.red))
+                    .build();
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+            notificationManager.notify(NOTIFICATION_ID,notification);
+            NOTIFICATION_ID++;
+        }
     }
 }
 

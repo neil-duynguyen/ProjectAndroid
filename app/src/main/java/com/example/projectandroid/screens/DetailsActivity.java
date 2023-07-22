@@ -51,7 +51,7 @@ public class DetailsActivity extends AppCompatActivity {
         nameUser = findViewById(R.id.home_frag_user_name);
         imgProfile = findViewById(R.id.profile_image_detail);
         map = (ImageView) findViewById(R.id.map);
-
+        getProviderAccount() ;
         pri = getIntent().getStringExtra("price");
         des = getIntent().getStringExtra("description");
         img = getIntent().getStringExtra("image");

@@ -295,7 +295,7 @@ public class DirectActivity extends AppCompatActivity implements OnMapReadyCallb
         float distanceInMeters = startLocation.distanceTo(endLocation);
 
         // Chuyển đổi sang kilômét và trả về
-        return distanceInMeters / 10.0f;
+        return distanceInMeters / 100.0f;
     }
 
     // Phương thức để giải mã chuỗi polyline thành danh sách các điểm (LatLng)
