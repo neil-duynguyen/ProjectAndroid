@@ -39,7 +39,7 @@ public class Item {
         this.id = id;
     }
 
-    public Item(String location, String price, String description, String shortDescription, String image, String id, String address) {
+    public Item(String address, String location, String price, String description, String shortDescription, String image, String id) {
         this.location = location;
         this.price = price;
         this.description = description;
